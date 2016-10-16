@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@android:color/black">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:id="@+id/ivMovieImage"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            tools:src="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                tools:text="Bridget Jones's Baby"
+                android:textColor="@android:color/white"
+                android:id="@+id/tvTitle"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/ivMovieImage"
+                android:layout_toEndOf="@+id/ivMovieImage" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Breaking up with Mark Darcy leaves Bridget Jones over
+                40 and single again. Feeling that she has everything under control,
+                Jones decides to focus on her career as a top news producer.
+                Suddenly, her love life comes back from the dead when she meets a dashing
+                and handsome American named Jack. Things couldn't be better, until Bridget
+                discovers that she is pregnant. Now, the befuddled mom-to-be must figure out
+                if the proud papa is Mark or Jack."
+                android:textColor="@android:color/secondary_text_dark"
+                android:id="@+id/tvOverview"
+                android:layout_below="@+id/tvTitle"
+                android:layout_toRightOf="@+id/ivMovieImage"
+                android:layout_toEndOf="@+id/ivMovieImage" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
