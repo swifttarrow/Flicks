@@ -52,10 +52,10 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         int orientation = getContext().getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             viewHolder.tvOverview.setText(shorten(movie.getOverview()));
-            Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.ivImage);
+            loadImage(viewHolder.ivImage, movie.getPosterPath());
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             viewHolder.tvOverview.setText(movie.getOverview());
-            Picasso.with(getContext()).load(movie.getBackdropPath()).into(viewHolder.ivImage);
+            loadImage(viewHolder.ivImage, movie.getBackdropPath());
         }
 
 
@@ -64,5 +64,11 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     private String shorten(String text){
         return text.substring(0, 75) + "...";
+    }
+
+    private void loadImage(ImageView imageView, String imageURL){
+        Picasso.with(getContext()).load(imageURL).fit().centerCrop()
+                .placeholder(R.mipmap.ic_launcher)
+                .into(imageView);
     }
 }
