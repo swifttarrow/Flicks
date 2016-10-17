@@ -42,7 +42,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/21AjV9V.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/H89pNJK.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [EzGif](http://ezgif.com/video-to-gif).
 MP4 demo available on Github.
