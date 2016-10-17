@@ -1,9 +1,12 @@
 package learningandroid.flickster;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -35,6 +38,23 @@ public class MovieActivity extends AppCompatActivity {
         lvItems = (ListView) findViewById(R.id.lvMovies);
         movieAdapter = new MovieArrayAdapter(this, movies);
         lvItems.setAdapter(movieAdapter);
+
+        lvItems.setOnItemClickListener(
+                new android.widget.AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter,
+                                            View item, int pos, long id) {
+                        Intent i = new Intent(MovieActivity.this, MovieDetailActivity.class);
+                        Movie thisMovie = movieAdapter.getItem(pos);
+                        i.putExtra("imageUrl", thisMovie.getPosterPath());
+                        i.putExtra("title", thisMovie.getOriginalTitle());
+                        i.putExtra("releaseDate", thisMovie.getReleaseDate());
+                        i.putExtra("rating", String.valueOf(thisMovie.getRating()));
+                        i.putExtra("overview", thisMovie.getOverview());
+
+                        startActivity(i);
+                    }
+                });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
