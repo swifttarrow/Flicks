@@ -34,9 +34,7 @@
                 tools:text="Bridget Jones's Baby"
                 android:textColor="@android:color/white"
                 android:id="@+id/tvTitle"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/ivMovieImage"
-                android:layout_toEndOf="@+id/ivMovieImage" />
+                android:layout_alignParentTop="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,9 +48,7 @@
                 if the proud papa is Mark or Jack."
                 android:textColor="@android:color/secondary_text_dark"
                 android:id="@+id/tvOverview"
-                android:layout_below="@+id/tvTitle"
-                android:layout_toRightOf="@+id/ivMovieImage"
-                android:layout_toEndOf="@+id/ivMovieImage" />
+                android:layout_below="@+id/tvTitle" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -29,6 +29,7 @@ public class MovieActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
     private String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
     private static AsyncHttpClient client = new AsyncHttpClient();
+    private int RESULT_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +45,26 @@ public class MovieActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter,
                                             View item, int pos, long id) {
-                        Intent i = new Intent(MovieActivity.this, MovieDetailActivity.class);
                         Movie thisMovie = movieAdapter.getItem(pos);
-                        i.putExtra("imageUrl", thisMovie.getPosterPath());
-                        i.putExtra("title", thisMovie.getOriginalTitle());
-                        i.putExtra("releaseDate", thisMovie.getReleaseDate());
-                        i.putExtra("rating", String.valueOf(thisMovie.getRating()));
-                        i.putExtra("overview", thisMovie.getOverview());
 
-                        startActivity(i);
+                        if (thisMovie.getPopularity() == Movie.Popularity.BORING){
+                            Intent i = new Intent(MovieActivity.this, MovieDetailActivity.class);
+
+                            i.putExtra("imageUrl", thisMovie.getPosterPath());
+                            i.putExtra("title", thisMovie.getOriginalTitle());
+                            i.putExtra("releaseDate", thisMovie.getReleaseDate());
+                            i.putExtra("rating", String.valueOf(thisMovie.getRating()));
+                            i.putExtra("overview", thisMovie.getOverview());
+                            i.putExtra("movieSrcUrl", thisMovie.getMovieSrcUrl());
+
+                            startActivity(i);
+                        } else if (thisMovie.getPopularity() == Movie.Popularity.POPULAR){
+                            Intent i = new Intent(MovieActivity.this, MovieTrailerActivity.class);
+
+                            i.putExtra("movieSrcUrl", thisMovie.getMovieSrcUrl());
+                            startActivityForResult(i, RESULT_CODE);
+                        }
+
                     }
                 });
 
@@ -93,11 +105,6 @@ public class MovieActivity extends AppCompatActivity {
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
     }

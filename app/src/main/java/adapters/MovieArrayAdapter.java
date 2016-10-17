@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import learningandroid.flickster.R;
 import models.Movie;
 
@@ -91,12 +92,16 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     }
 
     private String shorten(String text){
+        if (text.length() <= 75){
+            return text;
+        }
         return text.substring(0, 75) + "...";
     }
 
     private void loadImage(ImageView imageView, String imageURL){
         Picasso.with(getContext()).load(imageURL).fit().centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
+                .transform(new RoundedCornersTransformation(10, 10))
                 .into(imageView);
     }
 

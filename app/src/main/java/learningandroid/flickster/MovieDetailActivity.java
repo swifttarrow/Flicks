@@ -1,18 +1,22 @@
 package learningandroid.flickster;
 
-import android.app.Application;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 public class MovieDetailActivity extends AppCompatActivity {
+    private static int RESULT_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +34,27 @@ public class MovieDetailActivity extends AppCompatActivity {
         think of it like a website and web development. each activity stands alone.
          */
         //Get all the values passed from intent.
-        String imageUrl = getIntent().getExtras().getString("imageUrl");
-        String title = getIntent().getExtras().getString("title");
-        String releaseDate = getIntent().getExtras().getString("releaseDate");
-        float rating = Float.parseFloat(getIntent().getExtras().getString("rating"));
-        String overview = getIntent().getExtras().getString("overview");
+        Bundle extras = getIntent().getExtras();
+        String imageUrl = extras.getString("imageUrl");
+        String title = extras.getString("title");
+        String releaseDate = extras.getString("releaseDate");
+        float rating = Float.parseFloat(extras.getString("rating"));
+        String overview = extras.getString("overview");
+        final String movieSrcUrl = extras.getString("movieSrcUrl");
 
         //Get all containers for the values.
         ImageView ivImage = (ImageView) findViewById(R.id.ivMovieImage);
+
+        ivImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MovieDetailActivity.this, MovieTrailerActivity.class);
+
+                i.putExtra("movieSrcUrl", movieSrcUrl);
+                startActivityForResult(i, RESULT_CODE);
+            }
+        });
+
         TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
         TextView tvReleaseDate = (TextView) findViewById(R.id.tvReleaseDate);
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rbRatingBar);
@@ -60,6 +77,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void loadImage(ImageView imageView, String imageURL){
         Picasso.with(this).load(imageURL).fit().centerInside()
                 .placeholder(R.mipmap.ic_launcher)
+                .transform(new RoundedCornersTransformation(10, 10))
                 .into(imageView);
     }
 }
