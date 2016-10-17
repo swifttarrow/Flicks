@@ -25,39 +25,67 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         TextView tvTitle;
         TextView tvOverview;
     }
+    private static class ViewHolder2{
+        ImageView ivImage;
+    }
+
     public MovieArrayAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
+    }
+
+    @Override
+    public int getViewTypeCount(){
+        return Movie.Popularity.values().length;
+    }
+
+    @Override
+    public int getItemViewType(int position){
+        return getItem(position).getPopularity().ordinal();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //get data item for position
         Movie movie = getItem(position);
+        Movie.Popularity popularity = Movie.Popularity.values()[getItemViewType(position)];
+
         ViewHolder viewHolder;
-        if (convertView == null){
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_movie, parent, false); //Why's this 3rd parameter false?
-            viewHolder.ivImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
-            viewHolder.ivImage.setImageResource(0);
+        ViewHolder2 viewHolder2;
+        if (popularity == Movie.Popularity.BORING){
+            if (convertView == null){
+                viewHolder = new ViewHolder();
+                convertView = getInflatedLayoutForType(getItemViewType(position));
+                viewHolder.ivImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
+                viewHolder.ivImage.setImageResource(0);
 
-            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-            viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+                viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+                viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+                convertView.setTag(viewHolder); //TODO: Understand this more.
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag(); //TODO: Understand this more.
+            }
+            viewHolder.tvTitle.setText(movie.getOriginalTitle());
+            int orientation = getContext().getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                viewHolder.tvOverview.setText(shorten(movie.getOverview()));
+                loadImage(viewHolder.ivImage, movie.getPosterPath());
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                viewHolder.tvOverview.setText(movie.getOverview());
+                loadImage(viewHolder.ivImage, movie.getBackdropPath());
+            }
+        } else if (popularity == Movie.Popularity.POPULAR){
+            if (convertView == null){
+                viewHolder2 = new ViewHolder2();
+                convertView = getInflatedLayoutForType(getItemViewType(position));
+                viewHolder2.ivImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
+                viewHolder2.ivImage.setImageResource(0);
+
+                convertView.setTag(viewHolder2);
+            } else {
+                viewHolder2 = (ViewHolder2) convertView.getTag();
+            }
+            loadImage(viewHolder2.ivImage, movie.getBackdropPath());
         }
-
-        viewHolder.tvTitle.setText(movie.getOriginalTitle());
-        int orientation = getContext().getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            viewHolder.tvOverview.setText(shorten(movie.getOverview()));
-            loadImage(viewHolder.ivImage, movie.getPosterPath());
-        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            viewHolder.tvOverview.setText(movie.getOverview());
-            loadImage(viewHolder.ivImage, movie.getBackdropPath());
-        }
-
 
         return convertView;
     }
@@ -70,5 +98,15 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         Picasso.with(getContext()).load(imageURL).fit().centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
                 .into(imageView);
+    }
+
+    private View getInflatedLayoutForType(int type) {
+        if (type == Movie.Popularity.BORING.ordinal()) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.item_movie, null);
+        } else if (type == Movie.Popularity.POPULAR.ordinal()) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.item_movie_popular, null);
+        } else {
+            return null;
+        }
     }
 }

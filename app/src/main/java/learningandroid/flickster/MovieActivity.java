@@ -61,15 +61,13 @@ public class MovieActivity extends AppCompatActivity {
                 JSONArray movieJsonResults;
                 try {
                     if (isSwipeRefresh){
-                        movies.clear();
+                        movieAdapter.clear();
                     }
                     movieJsonResults = response.getJSONArray("results");
-                    movies.addAll(Movie.fromJSONArray(movieJsonResults));
+                    movieAdapter.addAll(Movie.fromJSONArray(movieJsonResults));
 
                     if (isSwipeRefresh){
                         swipeContainer.setRefreshing(false);
-                    } else {
-                        movieAdapter.notifyDataSetChanged(); //Do I need to do this for swipe refresh?
                     }
                     Log.d("DEBUG", movieJsonResults.toString());
                 } catch (JSONException e){
