@@ -2,7 +2,7 @@
 
 **Flicks** shows the latest movies currently playing in theaters. The app utilizes the Movie Database API to display images and basic information about these movies to the user.
 
-Time spent: **12** hours spent in total
+Time spent: **25** hours spent in total
 
 ## User Stories
 
@@ -18,7 +18,7 @@ The following **optional** features are implemented:
 
 * [X] User can **pull-to-refresh** popular stream to get the latest movies.
 * [X] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading.
-* [ ] Improved the user interface through styling and coloring.
+* [X] Improved the user interface through styling and coloring.
 
 The following **bonus** features are implemented:
 
@@ -28,9 +28,9 @@ The following **bonus** features are implemented:
     * [X] Overlay a play icon for videos that can be played.
     * [X] More popular movies should start a separate activity that plays the video immediately.
     * [X] Less popular videos rely on the detail page should show ratings and a YouTube preview. (no preview, loads video directly)
-* [ ] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
-* [ ] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
-* [ ] Replaced android-async-http network client with the popular [OkHttp](http://guides.codepath.com/android/Using-OkHttp) or [Volley](http://guides.codepath.com/android/Networking-with-the-Volley-Library) networking libraries.
+* [X] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
+* [X] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
+* [X] Replaced android-async-http network client with the popular [OkHttp](http://guides.codepath.com/android/Using-OkHttp) or [Volley](http://guides.codepath.com/android/Networking-with-the-Volley-Library) networking libraries.
 
 The following **additional** features are implemented:
 
@@ -44,7 +44,8 @@ Here's a walkthrough of implemented user stories:
 
 <img src='http://i.imgur.com/21AjV9V.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+GIF created with [EzGif](http://ezgif.com/video-to-gif).
+MP4 demo available on Github.
 
 ## Notes
 
@@ -55,15 +56,21 @@ Describe any challenges encountered while building the app.
 * Nesting callbacks was confusing. Needed the movieTrailer key to feed into the youtube's init callback loop.
 * Tried to defensively code for null json keys using optJSONObject. It didn't do what I expected and I opted to leave it out for now.
 * Couldn't get the showing of the thumbnail preview to work; suspected I need to know more about fragments.
+* OkHttp threw me an error: "Only original thread that created a view hierarchy can touch its views." 
+      * Worked around it via stackoverflow suggestion to use runOnUIThread().
+* Butterknife didn't work with ViewHolders. Made a lot of attempts, ultimately just removed
+  binding for that specific area.
 
 ## Open-source libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [OkHttp](https://github.com/square/okhttp) - Efficient HTTP client.
+- [Butterknife](http://jakewharton.github.io/butterknife/) - Field and method binding for Android views.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2016] [Kevin Chang]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

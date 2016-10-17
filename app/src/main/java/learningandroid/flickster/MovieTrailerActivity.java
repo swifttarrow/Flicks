@@ -1,24 +1,26 @@
 package learningandroid.flickster;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MovieTrailerActivity extends YouTubeBaseActivity {
-    private static AsyncHttpClient client = new AsyncHttpClient();
+    private static OkHttpClient client = new OkHttpClient();
     private static String API_KEY = "AIzaSyBcKMQ0F2VLtJNATlUS8SiVYN7oZLGujqY";
 
     @Override
@@ -30,32 +32,47 @@ public class MovieTrailerActivity extends YouTubeBaseActivity {
         final String movieSrcUrl = getIntent().getExtras().getString("movieSrcUrl");
         YouTubePlayerFragment youtubeFragment = (YouTubePlayerFragment)
                 getFragmentManager().findFragmentById(R.id.youtubeFragment);
-        youtubeFragment.initialize("API_KEY",
+        youtubeFragment.initialize(API_KEY,
                 new YouTubePlayer.OnInitializedListener() {
                     @Override
                     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                                         final YouTubePlayer youTubePlayer, boolean b) {
 
-                        client.get(movieSrcUrl, new JsonHttpResponseHandler() {
+
+                        Request request = new Request.Builder().url(movieSrcUrl).build();
+                        client.newCall(request).enqueue(new Callback() {
                             @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                JSONArray json;
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, final Response response) throws IOException {
                                 try {
-                                    json = response.getJSONArray("results");
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                                    //Arbitrarily picking the first trailer.
-                                    String trailerKey = json.getJSONObject(0).getString("key");
+                                            try {
+                                                JSONArray json = new JSONObject(response.body().string()).getJSONArray("results");
 
-                                    youTubePlayer.loadVideo(trailerKey);
+                                                //Arbitrarily picking the first trailer.
+                                                String trailerKey = json.getJSONObject(0).getString("key");
 
-                                    Log.d("DEBUG", json.toString());
-                                } catch (JSONException e) {
+                                                youTubePlayer.loadVideo(trailerKey);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
+
+                            ;
                         });
                     }
-
                     @Override
                     public void onInitializationFailure(YouTubePlayer.Provider provider,
                                                         YouTubeInitializationResult youTubeInitializationResult) {

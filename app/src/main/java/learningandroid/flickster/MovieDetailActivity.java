@@ -13,16 +13,24 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class MovieDetailActivity extends AppCompatActivity {
+    @BindView(R.id.ivMovieImage) ImageView ivMovieImage;
+    @BindView(R.id.tvTitle) TextView tvTitle;
+    @BindView(R.id.tvReleaseDate) TextView tvReleaseDate;
+    @BindView(R.id.rbRatingBar) RatingBar ratingBar;
+    @BindView(R.id.tvOverview) TextView tvOverview;
+
     private static int RESULT_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
+        ButterKnife.bind(this);
         //TODO: This is not the best way to do this:
         /*
         Nathan: you should be passing the movie object itself to the detail view
@@ -45,6 +53,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         //Get all containers for the values.
         ImageView ivImage = (ImageView) findViewById(R.id.ivMovieImage);
 
+        //TODO: I don't think I can use butterknife here, as movieSrcUrl needs to be defined first
+        //and be declared as final.
         ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,9 +71,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         TextView tvOverview = (TextView) findViewById(R.id.tvOverview);
 
         //Set the values.
-        loadImage(ivImage, imageUrl);
+        loadImage(ivMovieImage, imageUrl);
         tvTitle.setText(title);
-        tvReleaseDate.setText("Release Date:" + releaseDate);
+        tvReleaseDate.setText("Release Date:  " + releaseDate);
         ratingBar.setRating(rating);
         tvOverview.setText(overview);
 
